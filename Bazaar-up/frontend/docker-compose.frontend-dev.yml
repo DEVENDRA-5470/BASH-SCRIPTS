@@ -1,0 +1,20 @@
+services:
+  web:
+    build:
+      context: ./landing-pages
+      dockerfile: Dockerfile
+    user: "0:0"                   # dev only
+    ports:
+      - "5173:5173"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - CHOKIDAR_INTERVAL=100
+    volumes:
+      - ./landing-pages:/app      # bind source for HMR
+      - /app/node_modules         # Linux-only deps volume (fixes rollup musl)
+    healthcheck:
+      test: ["CMD-SHELL","wget -qO- http://localhost:5173/ | grep -qi '<html'"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+      start_period: 10s

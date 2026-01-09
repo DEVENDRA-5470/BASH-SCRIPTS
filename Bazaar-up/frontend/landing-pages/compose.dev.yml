@@ -1,0 +1,20 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    user: "1000:1000"           # your WSL uid:gid (id -u ; id -g)
+    ports:
+      - "5173:5173"
+    environment:
+      - CHOKIDAR_USEPOLLING=false
+    volumes:
+      - .:/app
+        # - /app/node_modules       # linux-only deps live here
+    healthcheck:
+      test: ["CMD-SHELL","wget -qO- http://localhost:5173/ | grep -qi '<html'"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+      start_period: 10s
+

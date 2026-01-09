@@ -1,0 +1,7 @@
+node_modules              # skip local deps (unneeded in image)
+dist
+build                     # skip build outputs
+.env
+.git
+*.log
+# IMPORTANT: do NOT list package-lock.json here
